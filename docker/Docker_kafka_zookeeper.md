@@ -12,8 +12,9 @@
    docker pull wurstmeister/zookeeper
    ```
 
-####使用docker-compose 构建
+#####使用docker-compose 构建
 1. 创建 docker-compose.yml 文件
+
 ```yaml
 version: '2'
 
@@ -34,7 +35,6 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
 
 ```
-
 Image:所使用的镜像（如果镜像不存在，进行pull，默认latest 版本）
 
 expose：声明的端口号
