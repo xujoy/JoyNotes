@@ -32,30 +32,44 @@ partitions 的数量和consumer 的数量有关。1：1
 5. 查看kafka消费者 消费消息情况
 
 ```bash
-./kafka-consumer-groups.sh --describe --bootstrap-server ZOOKEEPER_HOST:2181 --group Group_Name
+./kafka-consumer-groups.sh --describe --bootstrap-server KAFKA_HOST:9092 --group Group_Name
 ```
 
 6. 终端启动一个消费者
 
 ```bash
-kafka-console-consumer.sh --bootstrap-server ZOOKEEPER_HOST:2181 --topic TOPIC_NAME --from-beginning
+kafka-console-consumer.sh --bootstrap-server KAFKA_HOST:9092 --topic TOPIC_NAME --from-beginning
 ```
 --from-beginning :从消息的第一条开始进行消费，没有 从新发送的进行消费
 
 7. 终端启动一个生产者
 ```bash
 
-./kafka-console-producer.sh --broker-list ZOOKEEPER_HOST:2181 --topic TOPIC_NAME
+./kafka-console-producer.sh --broker-list KAFKA_HOST:9092 --topic TOPIC_NAME
 ```
 
----
+修改topic的partitions 数量
+```bash
+kafka-topics.sh --alter --zookeeper ZOOKEEPER_HOST:2181 --partitions 18 --topic TOPIC
+```
+
 
 0x. other 
 ```properties
-#消费者消费时的便宜量，latest 是从最新发送的数据开始进行消费，消费者启动前的数据不进行消费。
+#消费者消费时的偏移量，latest 是从最新发送的数据开始进行消费，消费者启动前的数据不进行消费。
 #earliest 是从上次消费的偏移量开始进行消费，假如第一次，则从最开始进行消费
 auto.offset.reset=earliest/latest
+
 ```
+
+**server.properties**
+
+```properties
+#当外部服务器调用kafka时，需要设置listeners参数，否则无法使用
+listeners=PLAINTEXT://10.10.10.81:9092
+```
+
+
 
 
 
