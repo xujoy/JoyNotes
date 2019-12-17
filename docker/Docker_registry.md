@@ -93,13 +93,9 @@ systemctl restart docker
 
 7.创建镜像tag
 
-
-
 ```shell
 docker tag 镜像 10.10.11.3:5000/镜像
 ```
-
-
 
 8.push 镜像
 
@@ -107,27 +103,49 @@ docker tag 镜像 10.10.11.3:5000/镜像
 docker push 10.10.11.3:5000/镜像
 ```
 
-
-
 9.查看是否push 成功
-
-
 
 ```
 curl http://10.10.11.3:5000/v2/_catalog
 ```
 
-
-
 返回：
-
-
 
 ```
 {"repositories":["evileyetool1"]}
 ```
 
 
+
+10.添加私库账号密码
+
+
+
+添加auth文件夹：
+
+```kotlin
+mkdir auth
+```
+
+添加账号密码：
+
+```kotlin
+docker run  --entrypoint htpasswd registry -Bbn  USERACCOUNT PASSWORD> auth/htpasswd
+```
+
+启动register容器：
+
+
+
+```kotlin
+docker run -d -p 5000:5000 --restart=always --name docker-hub \
+    -v ./registry:/var/lib/registry \
+    -v ./auth:/auth \
+    -e "REGISTRY_AUTH=htpasswd" \
+    -e "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm" \
+    -e  REGISTRY_AUTH_HTPASSWD_PATH=./auth/htpasswd \
+    registry
+```
 
 
 
